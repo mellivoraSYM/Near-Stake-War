@@ -97,7 +97,7 @@ echo 'export NEAR_ENV=shardnet' >> ~/.bashrc
     near proposals
     ```
     
-    ![Untitled](Near%20Prototol%20Stake%20Wars%20422f1e61ed194acbacce1dc35cdf95f3/Untitled%201.png)
+    ![Untitled](Untitled%201.png)
     
 2. **Validators Current**
     
