@@ -6,7 +6,7 @@
 
 [https://wallet.shardnet.near.org/](https://wallet.shardnet.near.org/)
 
-![Untitled](Near%20Prototol%20Stake%20Wars%20422f1e61ed194acbacce1dc35cdf95f3/Untitled.png)
+![Untitled](/Untitled.png)
 
 > P.S. when you create the account successful, it will give you some test-near
 > 
