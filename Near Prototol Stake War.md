@@ -6,6 +6,11 @@
 
 [https://wallet.shardnet.near.org/](https://wallet.shardnet.near.org/)
 
+![Untitled](Near%20Prototol%20Stake%20Wars%20422f1e61ed194acbacce1dc35cdf95f3/Untitled.png)
+
+> P.S. when you create the account successful, it will give you some test-near
+> 
+
 ## 1.2. Setup NEAR-CLI
 
 NEAR-CLI is a command-line interface that communicates with the NEAR blockchain via remote procedure calls (RPC):
@@ -13,29 +18,37 @@ NEAR-CLI is a command-line interface that communicates with the NEAR blockchain 
 - Setup and Installation NEAR CLI
 - View Validator Stats
 
-> Note: For security reasons, it is recommended that NEAR-CLI be installed on a different computer than your validator node and that no full access keys be kept on your validator node.
+> Note: For security reasons, it is recommended that NEAR-CLI be installed on a **different computer** than your validator node and that no full access keys be kept on your validator node.
 > 
 
 First, let's make sure the linux machine is up-to-date.
 
-`sudo apt update && sudo apt upgrade -y`
+```bash
+sudo apt update && sudo apt upgrade -y
+```
 
 ### 1.2.1. **Install developer tools, Node.js, and npm**
 
 First, we will start with installing `Node.js` and `npm`:
 
-`curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -  
+```bash
+curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -  
 sudo apt install build-essential nodejs
-PATH="$PATH"`
+PATH="$PATH"
+```
 
 Check `Node.js` and `npm` version:
 
-`node -v`
+```bash
+node -v
+```
 
 > v18.x.x
 > 
 
-`npm -v`
+```bash
+npm -v
+```
 
 > 8.x.x
 > 
@@ -44,7 +57,9 @@ Check `Node.js` and `npm` version:
 
 Here's the Github Repository for NEAR CLI.: [https://github.com/near/near-cli](https://github.com/near/near-cli). To install NEAR-CLI, unless you are logged in as root, which is not recommended you will need to use `sudo` to install NEAR-CLI so that the near binary is saved to /usr/local/bin
 
-`sudo npm install -g near-cli`
+```bash
+sudo npm install -g near-cli
+```
 
 ### 1.2.3. **Validator Stats**
 
@@ -59,9 +74,16 @@ Now that NEAR-CLI is installed, let's test out the CLI and use the following com
     - MainNet
     - **Shardnet** (this is the network we will use for Stake Wars)
 - Command:
-- `export NEAR_ENV=shardnet`
+
+```bash
+export NEAR_ENV=shardnet
+```
+
 - You can also run this command to set the Near testnet Environment persistent:
-- `echo 'export NEAR_ENV=shardnet' >> ~/.bashrc`
+
+```bash
+echo 'export NEAR_ENV=shardnet' >> ~/.bashrc
+```
 
 ### 1.2.5. **NEAR CLI Commands Guide:**
 
@@ -71,7 +93,11 @@ Now that NEAR-CLI is installed, let's test out the CLI and use the following com
     
     Command:
     
-    `near proposals`
+    ```bash
+    near proposals
+    ```
+    
+    ![Untitled](Near%20Prototol%20Stake%20Wars%20422f1e61ed194acbacce1dc35cdf95f3/Untitled%201.png)
     
 2. **Validators Current**
     
@@ -79,7 +105,11 @@ Now that NEAR-CLI is installed, let's test out the CLI and use the following com
     
     Command:
     
-    `near validators current`
+    ```bash
+    near validators current
+    ```
+    
+    ![Untitled](Near%20Prototol%20Stake%20Wars%20422f1e61ed194acbacce1dc35cdf95f3/Untitled%202.png)
     
 3. **Validators Next**
     
@@ -87,7 +117,11 @@ Now that NEAR-CLI is installed, let's test out the CLI and use the following com
     
     Command:
     
-    `near validators next`
+    ```bash
+    near validators next
+    ```
+    
+    ![Untitled](Near%20Prototol%20Stake%20Wars%20422f1e61ed194acbacce1dc35cdf95f3/Untitled%203.png)
     
 
 # 2. Setup a validator and sync it to the actual state of the network
@@ -96,7 +130,41 @@ Now that NEAR-CLI is installed, let's test out the CLI and use the following com
 
 Please see the hardware requirement below:
 
-[Untitled](https://www.notion.so/7ad764bc74d447b6a0f66ba3b2c9c130)
+| Hardware | Chunk-Only Producer Specifications | Software |
+| --- | --- | --- |
+| CPU | 4-Core CPU with AVX support | ubuntu |
+| RAM | 8GB DDR4 |  |
+| Storage | 500GB SSD |  |
+
+![Untitled](Near%20Prototol%20Stake%20Wars%20422f1e61ed194acbacce1dc35cdf95f3/Untitled%204.png)
+
+> Cost: AWS less than **120$** one month
+> 
+
+> Sometimes a newly allocated disk may need to be mounted, like⬇️
+> 
+
+[https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-using-volumes.html)
+
+```bash
+lsblk 
+
+#check file system on the device
+sudo file -s /dev/XXXXXX
+
+#if not
+sudo mkfs -t xfs /dev/XXXXXX
+
+#creates a directory
+sudo mkdir /data
+
+#mount the volume at the directory 
+sudo mount /dev/XXXXXX /data
+
+#usually we chmod 777 for /data/
+cd /
+chomd 777 /data/
+```
 
 ### **Install required software & set the configuration**
 
@@ -104,33 +172,52 @@ Please see the hardware requirement below:
 
 Before you start, you may want to confirm that your machine has the right CPU features.
 
-`lscpu | grep -P '(?=.*avx )(?=.*sse4.2 )(?=.*cx16 )(?=.*popcnt )' > /dev/null \
+```bash
+lscpu | grep -P '(?=.*avx )(?=.*sse4.2 )(?=.*cx16 )(?=.*popcnt )' > /dev/null \
   && echo "Supported" \
-  || echo "Not supported"`
+  || echo "Not supported"
+```
 
 > Supported
 > 
 
 ### **Install developer tools:**
 
-`sudo apt install -y git binutils-dev libcurl4-openssl-dev zlib1g-dev libdw-dev libiberty-dev cmake gcc g++ python docker.io protobuf-compiler libssl-dev pkg-config clang llvm cargo`
+```bash
+sudo apt install -y git binutils-dev libcurl4-openssl-dev zlib1g-dev libdw-dev libiberty-dev cmake gcc g++ python docker.io protobuf-compiler libssl-dev pkg-config clang llvm cargo
+```
+
+> if error ⬇️
+> 
+
+```bash
+sudo apt-get update
+```
 
 ### **Install Python pip:**
 
-`sudo apt install python3-pip`
+```bash
+sudo apt install python3-pip
+```
 
 ### **Set the configuration:**
 
-`USER_BASE_BIN=$(python3 -m site --user-base)/bin
-export PATH="$USER_BASE_BIN:$PATH"`
+```bash
+USER_BASE_BIN=$(python3 -m site --user-base)/bin
+export PATH="$USER_BASE_BIN:$PATH"
+```
 
 ### **Install Building env**
 
-`sudo apt install clang build-essential make`
+```bash
+sudo apt install clang build-essential make
+```
 
 ### **Install Rust & Cargo**
 
-`curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`
+```bash
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+```
 
 You will see the following:
 
@@ -140,25 +227,36 @@ Press 1 and press enter.
 
 ### **Source the environment**
 
-`source $HOME/.cargo/env`
+```bash
+source $HOME/.cargo/env
+```
 
 ### **Clone `nearcore` project from GitHub**
 
 First, clone the `[nearcore` repository](https://github.com/near/nearcore).
 
-`git clone https://github.com/near/nearcore
+```bash
+git clone https://github.com/near/nearcore
 cd nearcore
-git fetch`
+git fetch
+```
 
 Checkout to the commit needed. Please refer to the commit defined in [this file](https://github.com/near/stakewars-iii/blob/main/commit.md).
 
-`git checkout <commit>`
+```bash
+git checkout <commit>
+```
+
+> git checkout 0f81dca95a55f975b6e54fe6f311a71792e21698
+> 
 
 ### **Compile `nearcore` binary**
 
 In the `nearcore` folder run the following commands:
 
-`cargo build -p neard --release --features shardnet`
+```bash
+cargo build -p neard --release --features shardnet
+```
 
 The binary path is `target/release/neard`. If you are seeing issues, it is possible that cargo command is not found. Compiling `nearcore` binary may take a little while.
 
@@ -166,7 +264,9 @@ The binary path is `target/release/neard`. If you are seeing issues, it is poss
 
 In order to work properly, the NEAR node requires a working directory and a couple of configuration files. Generate the initial required working directory by running:
 
-`./target/release/neard --home ~/.near init --chain-id shardnet --download-genesis`
+```bash
+./target/release/neard --home ~/.near init --chain-id shardnet --download-genesis
+```
 
 ![https://github.com/near/stakewars-iii/raw/main/challenges/images/initialize.png](https://github.com/near/stakewars-iii/raw/main/challenges/images/initialize.png)
 
@@ -184,8 +284,10 @@ From the generated `config.json`, there two parameters to modify:
 - `boot_nodes`: If you had not specify the boot nodes to use during init in Step 3, the generated `config.json` shows an empty array, so we will need to replace it with a full one specifying the boot nodes.
 - `tracked_shards`: In the generated `config.json`, this field is an empty. You will have to replace it to `"tracked_shards": [0]`
 
-`rm ~/.near/config.json
-wget -O ~/.near/config.json https://s3-us-west-1.amazonaws.com/build.nearprotocol.com/nearcore-deploy/shardnet/config.json`
+```bash
+rm ~/.near/config.json
+wget -O ~/.near/config.json https://s3-us-west-1.amazonaws.com/build.nearprotocol.com/nearcore-deploy/shardnet/config.json
+```
 
 ### **Get latest snapshot**
 
@@ -193,24 +295,32 @@ wget -O ~/.near/config.json https://s3-us-west-1.amazonaws.com/build.nearprotoco
 
 Install AWS Cli
 
-`sudo apt-get install awscli -y`
+```bash
+sudo apt-get install awscli -y
+```
 
 Download snapshot (genesis.json)
 
-`// IMPORTANT: NOT REQUIRED TO GET SNAPSHOT AFTER HARDFORK ON SHARDNET DURING 2022-07-18
+```bash
+// IMPORTANT: NOT REQUIRED TO GET SNAPSHOT AFTER HARDFORK ON SHARDNET DURING 2022-07-18
 cd ~/.near
-wget https://s3-us-west-1.amazonaws.com/build.nearprotocol.com/nearcore-deploy/shardnet/genesis.json`
+wget https://s3-us-west-1.amazonaws.com/build.nearprotocol.com/nearcore-deploy/shardnet/genesis.json
+```
 
 If the above fails, AWS CLI may be oudated in your distribution repository. Instead, try:
 
-`pip3 install awscli --upgrade`
+```bash
+pip3 install awscli --upgrade
+```
 
 ### **Run the node**
 
 To start your node simply run the following command:
 
-`cd ~/nearcore
-./target/release/neard --home ~/.near run`
+```bash
+cd ~/nearcore
+./target/release/neard --home ~/.near run
+```
 
 The node is now running you can see log outputs in your console. Your node should be find peers, download headers to 100%, and then download blocks.
 
@@ -226,14 +336,16 @@ A full access key needs to be installed locally to be able to sign transactions 
 
 - You need to run this command:
 
-`near login`
+```bash
+near login
+```
 
 > Note: This command launches a web browser allowing for the authorization of a full access key to be copied locally.
 > 
 
 1 – Copy the link in your browser
 
-![https://github.com/near/stakewars-iii/raw/main/challenges/images/1.png](https://github.com/near/stakewars-iii/raw/main/challenges/images/1.png)
+![Untitled](Near%20Prototol%20Stake%20Wars%20422f1e61ed194acbacce1dc35cdf95f3/Untitled%205.png)
 
 2 – Grant Access to Near CLI
 
@@ -251,22 +363,35 @@ A full access key needs to be installed locally to be able to sign transactions 
 
 - Run the following command:
 
-`cat ~/.near/validator_key.json`
+```bash
+cat ~/.near/validator_key.json
+```
 
-> Note: If a validator_key.json is not present, follow these steps to create one
+> Note: If a validator_key.json is not present, follow these steps to create one⬇️
 > 
 
 Create a `validator_key.json`
 
 - Generate the Key file:
 
-`near generate-key <pool_id>`
+```bash
+near generate-key <pool_id>
+```
 
 <pool_id> ---> xx.factory.shardnet.near WHERE xx is you pool name
 
 - Copy the file generated to shardnet folder: Make sure to replace <pool_id> by your accountId
 
-`cp ~/.near-credentials/shardnet/YOUR_WALLET.json ~/.near/validator_key.json`
+```bash
+cp ~/.near-credentials/shardnet/YOUR_WALLET.json ~/.near/validator_key.json
+```
+
+<aside>
+⚠️ P.S. when you install near-cli **on onther machine**, you should `cat YOUR_WALLET.json`, copy it and `vi validator_key.json` on ~/.near
+
+</aside>
+
+![Untitled](Near%20Prototol%20Stake%20Wars%20422f1e61ed194acbacce1dc35cdf95f3/Untitled%206.png)
 
 - Edit “account_id” => xx.factory.shardnet.near, where xx is your PoolName
 - Change `private_key` to `secret_key`
@@ -276,23 +401,30 @@ Create a `validator_key.json`
 
 File content must be in the following pattern:
 
-`{
+```bash
+{
   "account_id": "xx.factory.shardnet.near",
   "public_key": "ed25519:HeaBJ3xLgvZacQWmEctTeUqyfSU4SDEnEwckWxd92W2G",
   "secret_key": "ed25519:****"
-}`
+}
+```
 
 ### **Start the validator node**
 
-`target/release/neard run`
+```bash
+target/release/neard run
+```
 
 - Setup Systemd Command:
 
-`sudo vi /etc/systemd/system/neard.service`
+```bash
+sudo vi /etc/systemd/system/neard.service
+```
 
 Paste:
 
-`[Unit]
+```bash
+[Unit]
 Description=NEARd Daemon Service
 
 [Service]
@@ -308,40 +440,60 @@ TimeoutStopSec=45
 KillMode=mixed
 
 [Install]
-WantedBy=multi-user.target`
+WantedBy=multi-user.target
+```
+
+<aside>
+⚠️ P.S. when you clone `nearcore` on `/data`  ExecStart=/data/nearcore/target/release/neard run
+
+</aside>
 
 > Note: Change USER to your paths
 > 
 
 Command:
 
-`sudo systemctl enable neard`
+```bash
+sudo systemctl enable neard
+```
 
 Command:
 
-`sudo systemctl start neard`
+```bash
+sudo systemctl start neard
+```
 
 If you need to make a change to service because of an error in the file. It has to be reloaded:
 
-`sudo systemctl reload neard`
+```bash
+sudo systemctl reload neard
+```
 
 ### **Watch logs**
 
 Command:
 
-`journalctl -n 100 -f -u neard`
+```bash
+journalctl -n 100 -f -u neard
+```
 
 Make log output in pretty print
 
 Command:
 
-`sudo apt install ccze`
+```bash
+sudo apt install ccze
+```
 
 View Logs with color
 
 Command:
 
-`journalctl -n 100 -f -u neard | ccze -A`
+```bash
+journalctl -n 100 -f -u neard | ccze -A
+```
+
+![Untitled](Near%20Prototol%20Stake%20Wars%20422f1e61ed194acbacce1dc35cdf95f3/Untitled%207.png)
 
 ### **Becoming a Validator**
 
@@ -370,7 +522,9 @@ NEAR uses a staking pool factory with a whitelisted staking contract to ensure d
 
 Calls the staking pool factory, creates a new staking pool with the specified name, and deploys it to the indicated accountId.
 
-`near call factory.shardnet.near create_staking_pool '{"staking_pool_id": "<pool id>", "owner_id": "<accountId>", "stake_public_key": "<public key>", "reward_fee_fraction": {"numerator": 5, "denominator": 100}, "code_hash":"DD428g9eqLL8fWUxv8QSpVFzyHi1Qd16P8ephYCTmMSZ"}' --accountId="<accountId>" --amount=30 --gas=300000000000000`
+```bash
+near call factory.shardnet.near create_staking_pool '{"staking_pool_id": "<pool id>", "owner_id": "<accountId>", "stake_public_key": "<public key>", "reward_fee_fraction": {"numerator": 5, "denominator": 100}, "code_hash":"DD428g9eqLL8fWUxv8QSpVFzyHi1Qd16P8ephYCTmMSZ"}' --accountId="<accountId>" --amount=30 --gas=300000000000000
+```
 
 From the example above, you need to replace:
 
@@ -386,7 +540,9 @@ From the example above, you need to replace:
 
 To change the pool parameters, such as changing the amount of commission charged to 1% in the example below, use this command:
 
-`near call <pool_name> update_reward_fee_fraction '{"reward_fee_fraction": {"numerator": 1, "denominator": 100}}' --accountId <account_id> --gas=300000000000000`
+```bash
+near call <pool_name> update_reward_fee_fraction '{"reward_fee_fraction": {"numerator": 1, "denominator": 100}}' --accountId <account_id> --gas=300000000000000
+```
 
 You will see something like this:
 
@@ -404,7 +560,9 @@ Check your pool is now visible on [https://explorer.shardnet.near.org/nodes/val
 
 Command:
 
-`near call <staking_pool_id> deposit_and_stake --amount <amount> --accountId <accountId> --gas=300000000000000`
+```bash
+near call <staking_pool_id> deposit_and_stake --amount <amount> --accountId <accountId> --gas=300000000000000
+```
 
 ### **Unstake NEAR**
 
@@ -412,11 +570,15 @@ Amount in yoctoNEAR.
 
 Run the following command to unstake:
 
-`near call <staking_pool_id> unstake '{"amount": "<amount yoctoNEAR>"}' --accountId <accountId> --gas=300000000000000`
+```bash
+near call <staking_pool_id> unstake '{"amount": "<amount yoctoNEAR>"}' --accountId <accountId> --gas=300000000000000
+```
 
 To unstake all you can run this one:
 
-`near call <staking_pool_id> unstake_all --accountId <accountId> --gas=300000000000000`
+```bash
+near call <staking_pool_id> unstake_all --accountId <accountId> --gas=300000000000000
+```
 
 ### **Withdraw**
 
@@ -424,11 +586,15 @@ Unstaking takes 2-3 epochs to complete, after that period you can withdraw in Yo
 
 Command:
 
-`near call <staking_pool_id> withdraw '{"amount": "<amount yoctoNEAR>"}' --accountId <accountId> --gas=300000000000000`
+```bash
+near call <staking_pool_id> withdraw '{"amount": "<amount yoctoNEAR>"}' --accountId <accountId> --gas=300000000000000
+```
 
 Command to withdraw all:
 
-`near call <staking_pool_id> withdraw_all --accountId <accountId> --gas=300000000000000`
+```bash
+near call <staking_pool_id> withdraw_all --accountId <accountId> --gas=300000000000000
+```
 
 ### **Ping**
 
@@ -436,23 +602,31 @@ A ping issues a new proposal and updates the staking balances for your delegator
 
 Command:
 
-`near call <staking_pool_id> ping '{}' --accountId <accountId> --gas=300000000000000`
+```bash
+near call <staking_pool_id> ping '{}' --accountId <accountId> --gas=300000000000000
+```
 
 Balances Total Balance Command:
 
-`near view <staking_pool_id> get_account_total_balance '{"account_id": "<accountId>"}'`
+```bash
+near view <staking_pool_id> get_account_total_balance '{"account_id": "<accountId>"}'
+```
 
 ### **Staked Balance**
 
 Command:
 
-`near view <staking_pool_id> get_account_staked_balance '{"account_id": "<accountId>"}'`
+```bash
+near view <staking_pool_id> get_account_staked_balance '{"account_id": "<accountId>"}'
+```
 
 ### **Unstaked Balance**
 
 Command:
 
-`near view <staking_pool_id> get_account_unstaked_balance '{"account_id": "<accountId>"}'`
+```bash
+near view <staking_pool_id> get_account_unstaked_balance '{"account_id": "<accountId>"}'
+```
 
 ### **Available for Withdrawal**
 
@@ -460,7 +634,9 @@ You can only withdraw funds from a contract if they are unlocked.
 
 Command:
 
-`near view <staking_pool_id> is_account_unstaked_balance_available '{"account_id": "<accountId>"}'`
+```bash
+near view <staking_pool_id> is_account_unstaked_balance_available '{"account_id": "<accountId>"}'
+```
 
 ### **Pause / Resume Staking**
 
@@ -468,13 +644,17 @@ Command:
 
 Command:
 
-`near call <staking_pool_id> pause_staking '{}' --accountId <accountId>`
+```bash
+near call <staking_pool_id> pause_staking '{}' --accountId <accountId>
+```
 
 ### **Resume**
 
 Command:
 
-`near call <staking_pool_id> resume_staking '{}' --accountId <accountId>`
+```bash
+near call <staking_pool_id> resume_staking '{}' --accountId <accountId>
+```
 
 # 4. Setup tools for monitoring node status
 
@@ -488,13 +668,17 @@ The log file is stored either in the ~/.nearup/logs directory or in systemd depe
 
 Systemd Command:
 
-`journalctl -n 100 -f -u neard | ccze -A`
+```bash
+journalctl -n 100 -f -u neard | ccze -A
+```
 
 **Log file sample:**
 
 Validator | 1 validator
 
-`INFO stats: #85079829 H1GUabkB7TW2K2yhZqZ7G47gnpS7ESqicDMNyb9EE6tf Validator 73 validators 30 peers ⬇ 506.1kiB/s ⬆ 428.3kiB/s 1.20 bps 62.08 Tgas/s CPU: 23%, Mem: 7.4 GiB`
+```bash
+INFO stats: #85079829 H1GUabkB7TW2K2yhZqZ7G47gnpS7ESqicDMNyb9EE6tf Validator 73 validators 30 peers ⬇ 506.1kiB/s ⬆ 428.3kiB/s 1.20 bps 62.08 Tgas/s CPU: 23%, Mem: 7.4 GiB
+```
 
 - **Validator**: A “Validator” will indicate you are an active validator
 - **73 validators**: Total 73 validators on the network
@@ -511,22 +695,32 @@ Find many commands and how to use them in more detail here:
 
 Command:
 
-`sudo apt install curl jq`
+```bash
+sudo apt install curl jq
+```
 
 ### **Common Commands:**
 
 ####### Check your node version: Command:
 
-`curl -s http://127.0.0.1:3030/status | jq .version`
+```bash
+curl -s http://127.0.0.1:3030/status | jq .version
+```
 
 ####### Check Delegators and Stake Command:
 
-`near view <your pool>.factory.shardnet.near get_accounts '{"from_index": 0, "limit": 10}' --accountId <accountId>.shardnet.near`
+```bash
+near view <your pool>.factory.shardnet.near get_accounts '{"from_index": 0, "limit": 10}' --accountId <accountId>.shardnet.near
+```
 
 ####### Check Reason Validator Kicked Command:
 
-`curl -s -d '{"jsonrpc": "2.0", "method": "validators", "id": "dontcare", "params": [null]}' -H 'Content-Type: application/json' 127.0.0.1:3030 | jq -c '.result.prev_epoch_kickout[] | select(.account_id | contains ("<POOL_ID>"))' | jq .reason`
+```bash
+curl -s -d '{"jsonrpc": "2.0", "method": "validators", "id": "dontcare", "params": [null]}' -H 'Content-Type: application/json' 127.0.0.1:3030 | jq -c '.result.prev_epoch_kickout[] | select(.account_id | contains ("<POOL_ID>"))' | jq .reason
+```
 
 ####### Check Blocks Produced / Expected Command:
 
-`curl -s -d '{"jsonrpc": "2.0", "method": "validators", "id": "dontcare", "params": [null]}' -H 'Content-Type: application/json' 127.0.0.1:3030 | jq -c '.result.current_validators[] | select(.account_id | contains ("POOL_ID"))'`
+```bash
+curl -s -d '{"jsonrpc": "2.0", "method": "validators", "id": "dontcare", "params": [null]}' -H 'Content-Type: application/json' 127.0.0.1:3030 | jq -c '.result.current_validators[] | select(.account_id | contains ("POOL_ID"))'
+```
