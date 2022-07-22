@@ -109,7 +109,7 @@ echo 'export NEAR_ENV=shardnet' >> ~/.bashrc
     near validators current
     ```
     
-    ![Untitled](Near%20Prototol%20Stake%20Wars%20422f1e61ed194acbacce1dc35cdf95f3/Untitled%202.png)
+    ![Untitled](Untitled%202.png)
     
 3. **Validators Next**
     
@@ -121,7 +121,7 @@ echo 'export NEAR_ENV=shardnet' >> ~/.bashrc
     near validators next
     ```
     
-    ![Untitled](Near%20Prototol%20Stake%20Wars%20422f1e61ed194acbacce1dc35cdf95f3/Untitled%203.png)
+    ![Untitled](Untitled%203.png)
     
 
 # 2. Setup a validator and sync it to the actual state of the network
@@ -136,7 +136,7 @@ Please see the hardware requirement below:
 | RAM | 8GB DDR4 |  |
 | Storage | 500GB SSD |  |
 
-![Untitled](Near%20Prototol%20Stake%20Wars%20422f1e61ed194acbacce1dc35cdf95f3/Untitled%204.png)
+![Untitled](Untitled%204.png)
 
 > Cost: AWS less than **120$** one month
 > 
@@ -345,7 +345,7 @@ near login
 
 1 – Copy the link in your browser
 
-![Untitled](Near%20Prototol%20Stake%20Wars%20422f1e61ed194acbacce1dc35cdf95f3/Untitled%205.png)
+![Untitled](Untitled%205.png)
 
 2 – Grant Access to Near CLI
 
@@ -391,7 +391,7 @@ cp ~/.near-credentials/shardnet/YOUR_WALLET.json ~/.near/validator_key.json
 
 </aside>
 
-![Untitled](Near%20Prototol%20Stake%20Wars%20422f1e61ed194acbacce1dc35cdf95f3/Untitled%206.png)
+![Untitled](Untitled%206.png)
 
 - Edit “account_id” => xx.factory.shardnet.near, where xx is your PoolName
 - Change `private_key` to `secret_key`
@@ -493,7 +493,7 @@ Command:
 journalctl -n 100 -f -u neard | ccze -A
 ```
 
-![Untitled](Near%20Prototol%20Stake%20Wars%20422f1e61ed194acbacce1dc35cdf95f3/Untitled%207.png)
+![Untitled](Untitled%207.png)
 
 ### **Becoming a Validator**
 
