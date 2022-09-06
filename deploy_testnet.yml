@@ -1,0 +1,50 @@
+---
+version: "2.0"
+
+services:
+  app:
+    image: dimokus88/ubuntu:1.1
+    env:
+     - "my_root_password=" 
+     #- "link_key="
+    command:
+      - "bash"
+      - "-c"
+    args:
+      - 'curl -s https://raw.githubusercontent.com/mellivoraSYM/evan9527.github.io/gh-pages/start-testnet.sh | bash '
+    expose:
+      - port: 80
+        as: 80
+        to:
+          - global: true
+      - port: 22
+        as: 22
+        to:
+          - global: true
+      - port: 3030
+        as: 3030
+        to:
+          - global: true
+profiles:
+  compute:
+    app:
+      resources:
+        cpu:
+          units: 4.0
+        memory:
+          size: 6Gi
+        storage:
+          size: 200Gi
+        
+        
+  placement:
+    akash: 
+      pricing:
+        app:
+          denom: uakt
+          amount: 10000
+deployment:
+  app:
+    akash:
+      profile: app
+      count: 1 
